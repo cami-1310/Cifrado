@@ -1,0 +1,87 @@
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    width: 800px;
+    border: solid 2px #6962FC;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.botones{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+label{
+    margin: 5px;
+}
+
+input, select, textarea{
+    padding: 5px;
+    font-family: "Space Mono", monospace;
+}
+
+textarea{
+    height: 120px;
+    resize: none;
+}
+
+button{
+    margin: 5px;
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    width: 100px;
+    background-color: #6962FC;
+    color: white;
+    font-family: "Space Mono", monospace;
+    font-style: bold;
+}
+
+.extra{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.moduloMsj{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.moduloMsj > input{
+    width: 90%;
+}
+
+.moduloMsj > button{
+    margin: 0;
+    margin-left: 15px;
+}
+
+.moduloResultado{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.resultado{
+    background-color: #CAC6F7;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 0;
+}
+
+.resultado > p{
+    padding: 5px;
+    word-break: break-word;
+}

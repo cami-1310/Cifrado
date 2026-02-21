@@ -1,0 +1,47 @@
+<div class="contenedor">
+  <label>Elige método de cifrado</label>
+  <select [(ngModel)]="opc">
+    @for (item of opcionesMetodos; track item) {
+      <option value="{{item.id}}">{{item.nombre}}</option>
+    }
+  </select>
+
+  <label>Elige alfabeto</label>
+  <select [(ngModel)]="alfb">
+    @for (item of opcionesAlfabeto; track item) {
+      <option value="{{item.id}}">{{item.opc}}</option>
+    }
+  </select>
+
+  @if (alfb==3) {
+    <div class="extra">
+      <label>Ingresa conjunto de caracteres que se usarán para el cifrado</label>
+      <textarea [(ngModel)]="arrayCaracteres"></textarea>
+    </div>
+  }
+
+  @if (opc==='cesar') {
+    <div class="extra">
+      <label>Ingresa módulo</label>
+      <input [(ngModel)]="modulo" type="number">
+    </div>
+  }
+
+  <label>Ingresa el mensaje</label>
+  <div class="moduloMsj">
+    <input [(ngModel)]="msj" type="text">
+    <button class="botones" (click)="enviarMsj()">Enviar</button>
+  </div>
+
+  <div class="moduloResultado">
+    <div class="resultado">
+      <h3>Mensaje cifrado:</h3>
+      <p>{{cifrado}}</p>
+    </div>
+    <div class="resultado">
+      <h3>Mensaje descifrado:</h3>
+      <p>{{descifrado}}</p>
+    </div>
+  </div>
+
+</div>
