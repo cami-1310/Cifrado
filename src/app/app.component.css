@@ -50,18 +50,18 @@ button{
 
 .moduloMsj{
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    margin: 0;
 }
 
 .moduloMsj > input{
-    width: 90%;
+    width: 100%;
 }
 
 .moduloMsj > button{
     margin: 0;
-    margin-left: 15px;
+    margin-left: 10px;
 }
 
 .moduloResultado{

@@ -32,12 +32,8 @@ export class AppComponent {
     {id: 3, opc:'Otro'}
   ];
 
-  enviarMsj(){
-    this.cifrar();
-    this.descifrar();
-  }
-
   cifrar(){
+    console.clear();
     const alfabeto=this.getAlfabeto();
     if(!this.revisarMsj(this.msj, alfabeto)) return;
     if(this.opc==='cesar'){
@@ -45,46 +41,47 @@ export class AppComponent {
     } else{
       this.cifrado=this.atbash(this.msj, alfabeto);
     }
+    this.descifrado='';
   }
 
   descifrar(){
+    console.clear();
     const alfabeto=this.getAlfabeto();
+    if(!this.revisarMsj(this.msj, alfabeto)) return;
     if(this.opc==='cesar'){
-      this.descifrado=this.cesar(this.cifrado, -this.modulo, alfabeto);
+      this.descubrirModuloCesar();
+      this.descifrado=this.cesar(this.msj, -this.modulo, alfabeto);
     } else{
-      this.descifrado=this.atbash(this.cifrado, alfabeto);
+      this.descifrado=this.atbash(this.msj, alfabeto);
     }
+    this.cifrado='';
   }
 
   getAlfabeto(): string{
     let alfabeto;
-
-    if(this.alfb==="1"){
+    if(this.alfb==='1'){
       //mayusculas
       alfabeto='';
       this.length=26;
       alfabeto='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      console.log(alfabeto);
-    } else if(this.alfb==="2"){
+    } else if(this.alfb==='2'){
       //ascii
       alfabeto='';
       //ASCII imprimible (sin espacio inicial 32)
-      for (let i = 32; i <= 126; i++) {
+      for (let i=32; i<=126; i++) {
         alfabeto += String.fromCharCode(i);
       }
 
       //Latin-1 extendido visible
-      for (let i = 161; i <= 254; i++) {
-        alfabeto += String.fromCharCode(i);
+      for (let i=161; i<=254; i++) {
+        alfabeto+=String.fromCharCode(i);
       }
       this.length=alfabeto.length;
-      console.log(alfabeto);
-    } else if(this.alfb==="3"){
+    } else if(this.alfb==='3'){
       //personalizado
-      if(!this.revisarAlfabetoP(this.arrayCaracteres)) return '';
+      if(!this.revisarAlfabetoP()) return '';
       this.length=this.arrayCaracteres.length;
       alfabeto=this.arrayCaracteres;
-      console.log(alfabeto);
     } else {
       //ninguno
       Swal.fire({
@@ -146,13 +143,13 @@ export class AppComponent {
     return resultado;
   }
 
-  revisarAlfabetoP(alfabeto: string): boolean{
-    if (!alfabeto) return false;
+  revisarAlfabetoP(): boolean{
+    if (!this.arrayCaracteres) return false;
 
-    // Quitar espacios accidentales
-    alfabeto=alfabeto.trim();
+    //Quitar espacios accidentales
+    this.arrayCaracteres=this.arrayCaracteres.trim();
 
-    if (alfabeto.length < 2){
+    if (this.arrayCaracteres.length <2){
       Swal.fire({
         title: "Alfabeto inválido",
         text: "No es posible cifrar sólo con los caracteres ingresados, ingresa más",
@@ -162,9 +159,9 @@ export class AppComponent {
     }
 
     //elimina repetidos, disminuye longitud tantas veces como caracteres repetidos encuentre
-    const set=new Set(alfabeto); 
+    const set=new Set(this.arrayCaracteres); 
 
-    if (set.size!==alfabeto.length) {
+    if (set.size!==this.arrayCaracteres.length) {
       //si las longitudes son diferentes es porque el alfabeto contiene caracteres repetidos
       Swal.fire({
         title: "Alfabeto inválido",
@@ -179,8 +176,8 @@ export class AppComponent {
 
   revisarMsj(texto: string, alfabeto: string): boolean{
     //revisamos que cada caracter del mensaje este presente en el alfabeto
-    for (let char of texto) {
-      if (!alfabeto.includes(char)) {
+    /*for (let char of texto) {
+      if (char !== " " && !alfabeto.includes(char)) {
         Swal.fire({
           title: "Mensaje inválido",
           text: "El mensaje que deseas cifrar no es compatible con los caracteres del alfabeto que elegiste. Intenta con otro.",
@@ -188,7 +185,7 @@ export class AppComponent {
         });
         return false;
       }
-    }
+    }*/
 
     if(this.alfb==="1" && texto!==texto.toUpperCase()){
       //si eige el alfabeto 1 el mensaje debe estar en mayusculas
@@ -201,5 +198,22 @@ export class AppComponent {
     }
 
     return true;
+  }
+
+  descubrirModuloCesar() {
+    const alfabeto=this.getAlfabeto();
+    if (!alfabeto) return;
+    if (!this.revisarMsj(this.msj, alfabeto)) return;
+
+    const n=alfabeto.length;
+
+    console.log("=== POSIBLES DESPLAZAMIENTOS ===");
+
+    for (let k=0; k<n; k++) {
+      const posible = this.cesar(this.msj, -k, alfabeto);
+      console.log(`k = ${k} -> ${posible}`);
+    }
+
+    console.log("=== FIN ===");
   }
 }

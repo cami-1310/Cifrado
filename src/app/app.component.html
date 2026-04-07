@@ -13,7 +13,7 @@
     }
   </select>
 
-  @if (alfb==3) {
+  @if (alfb=='3') {
     <div class="extra">
       <label>Ingresa conjunto de caracteres que se usarán para el cifrado</label>
       <textarea [(ngModel)]="arrayCaracteres"></textarea>
@@ -30,7 +30,8 @@
   <label>Ingresa el mensaje</label>
   <div class="moduloMsj">
     <input [(ngModel)]="msj" type="text">
-    <button class="botones" (click)="enviarMsj()">Enviar</button>
+    <button class="botones" (click)="cifrar()">Cifrar</button>
+    <button class="botones" (click)="descifrar()">Descifrar</button>
   </div>
 
   <div class="moduloResultado">
