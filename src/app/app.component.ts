@@ -3,20 +3,22 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { flatMap } from 'rxjs';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, NgClass],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'cifrado';
   msj: string='';
+  opcionActiva: string='cifrar'
   cifrado: string='';
   descifrado: string='';
   opc: string='';
-  modulo: number=3;
+  modulo: number=0;
   alfb: any;
   length: number=0;
   arrayCaracteres: string='';
@@ -32,8 +34,24 @@ export class AppComponent {
     {id: 3, opc:'Otro'}
   ];
 
+  opcionCifrar(){
+    this.opcionActiva='cifrar';
+    this.opc='';
+    this.alfb='';
+    this.msj='';
+    this.cifrado=''
+  }
+
+  opcionDescifrar(){
+    this.opcionActiva='descifrar';
+    this.opc='';
+    this.alfb='';
+    this.msj='';
+    this.descifrado=''
+    this.modulo=0;
+  }
+
   cifrar(){
-    console.clear();
     const alfabeto=this.getAlfabeto();
     if(!this.revisarMsj(this.msj, alfabeto)) return;
     if(this.opc==='cesar'){
@@ -45,11 +63,9 @@ export class AppComponent {
   }
 
   descifrar(){
-    console.clear();
     const alfabeto=this.getAlfabeto();
     if(!this.revisarMsj(this.msj, alfabeto)) return;
     if(this.opc==='cesar'){
-      this.descubrirModuloCesar();
       this.descifrado=this.cesar(this.msj, -this.modulo, alfabeto);
     } else{
       this.descifrado=this.atbash(this.msj, alfabeto);
@@ -200,20 +216,76 @@ export class AppComponent {
     return true;
   }
 
+  moduloConocido(){
+    Swal.fire({
+      title: 'Ingresa el módulo',
+      input: 'number',
+      inputPlaceholder: 'Escribe aquí...',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.modulo=Number(result.value);
+        this.descifrar();
+      }
+    });
+  }
+
   descubrirModuloCesar() {
     const alfabeto=this.getAlfabeto();
     if (!alfabeto) return;
     if (!this.revisarMsj(this.msj, alfabeto)) return;
 
     const n=alfabeto.length;
-
-    console.log("=== POSIBLES DESPLAZAMIENTOS ===");
-
+    const resultados=[]
+    
     for (let k=0; k<n; k++) {
       const posible = this.cesar(this.msj, -k, alfabeto);
-      console.log(`k = ${k} -> ${posible}`);
+      resultados.push({
+        desplazamiento: k,
+        texto: posible,
+        score: 0
+      });
     }
 
-    console.log("=== FIN ===");
+    const palabrasFrecuentes=["el", "la", "los", "de", "que", "es", "puntos"];
+    const letrasFrecuentes="eaosrnidl";
+    let mejor=null;
+    let mejorScore=-1;
+
+    for(let r of resultados){
+      let score=0
+      const texto=r.texto.toLowerCase();
+
+      //palabras frecuentes
+      for(let palabra of palabrasFrecuentes){
+        const regex=new RegExp(`\\b${palabra}\\b`, "g");
+        const matches=texto.match(regex);
+        if(matches){
+          score+=matches.length;
+        }
+      }
+
+      //frecuencia de letras
+      for(let char of texto){
+        if(letrasFrecuentes.includes(char)) {
+          score++;
+        }
+      }
+
+      r.score=score;
+
+      if(score>mejorScore){
+        mejorScore=score;
+        mejor=r;
+      }
+    }
+
+    console.log("Todos:", resultados);
+    console.log("Mejor:", mejor);
+
+    if(mejor){
+      this.modulo=mejor.desplazamiento;
+      this.descifrar();
+    }
   }
 }

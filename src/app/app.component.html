@@ -1,48 +1,92 @@
 <div class="contenedor">
-  <label>Elige método de cifrado</label>
-  <select [(ngModel)]="opc">
-    @for (item of opcionesMetodos; track item) {
-      <option value="{{item.id}}">{{item.nombre}}</option>
-    }
-  </select>
+  <div class="opcionesCont">
+    <button class="botones" [ngClass]="{activo: opcionActiva==='cifrar'}" (click)="opcionCifrar()">Cifrar</button>
+    <button class="botones" [ngClass]="{activo: opcionActiva==='descifrar'}" (click)="opcionDescifrar()">Descifrar</button>
+  </div>
 
-  <label>Elige alfabeto</label>
-  <select [(ngModel)]="alfb">
-    @for (item of opcionesAlfabeto; track item) {
-      <option value="{{item.id}}">{{item.opc}}</option>
-    }
-  </select>
+  @if (opcionActiva==='cifrar'){
+    <div class="subCont">
+      <label>Elige método de cifrado</label>
+      <select [(ngModel)]="opc">
+        @for (item of opcionesMetodos; track item) {
+          <option value="{{item.id}}">{{item.nombre}}</option>
+        }
+      </select>
+  
+      <label>Elige alfabeto</label>
+      <select [(ngModel)]="alfb">
+        @for (item of opcionesAlfabeto; track item) {
+          <option value="{{item.id}}">{{item.opc}}</option>
+        }
+      </select>
+  
+      @if (alfb=='3') {
+        <div class="moduloCaracteres">
+          <label>Ingresa conjunto de caracteres que se usarán para el cifrado</label>
+          <textarea [(ngModel)]="arrayCaracteres"></textarea>
+        </div>
+      }
+  
+      <label>Ingresa el mensaje</label>
+      <div class="moduloMsj">
+        <input [(ngModel)]="msj" type="text">
+      </div>
+  
+      @if (opc==='cesar') {
+        <label>Ingresa módulo</label>
+        <div class="seccionModulo">
+          <input type="number" [(ngModel)]="modulo">
+          <button class="botones" (click)="cifrar()">Enviar</button>
+        </div>
+      }
 
-  @if (alfb=='3') {
-    <div class="extra">
-      <label>Ingresa conjunto de caracteres que se usarán para el cifrado</label>
-      <textarea [(ngModel)]="arrayCaracteres"></textarea>
+      <div class="resultado">
+        <h3>Mensaje cifrado:</h3>
+        <p>{{cifrado}}</p> 
+      </div>
     </div>
   }
 
-  @if (opc==='cesar') {
-    <div class="extra">
-      <label>Ingresa módulo</label>
-      <input [(ngModel)]="modulo" type="number">
+  @else {
+    <div class="subCont">
+      <label>Elige método de cifrado</label>
+      <select [(ngModel)]="opc">
+        @for (item of opcionesMetodos; track item) {
+          <option value="{{item.id}}">{{item.nombre}}</option>
+        }
+      </select>
+  
+      <label>Elige alfabeto</label>
+      <select [(ngModel)]="alfb">
+        @for (item of opcionesAlfabeto; track item) {
+          <option value="{{item.id}}">{{item.opc}}</option>
+        }
+      </select>
+  
+      @if (alfb=='3') {
+        <div class="moduloCaracteres">
+          <label>Ingresa conjunto de caracteres que se usarán para el cifrado</label>
+          <textarea [(ngModel)]="arrayCaracteres"></textarea>
+        </div>
+      }
+  
+      <label>Ingresa el mensaje</label>
+      <div class="moduloMsj">
+        <input [(ngModel)]="msj" type="text">
+      </div>
+  
+      @if (opc==='cesar') {
+        <div class="moduloModulo">
+          <button (click)="moduloConocido()">Ingresar módulo</button>
+          <button (click)="descubrirModuloCesar()">Fuerza bruta</button>
+        </div>
+      }
+
+      <div class="resultado">
+        <h3>Mensaje descifrado:</h3>
+        <p>{{descifrado}}</p>
+        <p style="font-weight: bold; font-style: italic;">Módulo: {{modulo}}</p>
+      </div>
     </div>
   }
-
-  <label>Ingresa el mensaje</label>
-  <div class="moduloMsj">
-    <input [(ngModel)]="msj" type="text">
-    <button class="botones" (click)="cifrar()">Cifrar</button>
-    <button class="botones" (click)="descifrar()">Descifrar</button>
-  </div>
-
-  <div class="moduloResultado">
-    <div class="resultado">
-      <h3>Mensaje cifrado:</h3>
-      <p>{{cifrado}}</p>
-    </div>
-    <div class="resultado">
-      <h3>Mensaje descifrado:</h3>
-      <p>{{descifrado}}</p>
-    </div>
-  </div>
-
 </div>
